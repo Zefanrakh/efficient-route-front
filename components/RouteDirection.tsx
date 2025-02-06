@@ -3,7 +3,7 @@ import { useRoadStore } from "@/state/road/road-store";
 export default function RouteDirection() {
   /* ----------------------------- STATE HOOK -------------------------------- */
 
-  const { routes } = useRoadStore();
+  const routes = useRoadStore((state) => state.routes);
 
   /* ----------------------------- RENDER -------------------------------- */
 

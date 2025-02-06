@@ -12,7 +12,8 @@ export default function SelectPoint({
 }) {
   /* ----------------------------- STATE HOOK -------------------------------- */
 
-  const { roads } = useRoadStore();
+  const roads = useRoadStore((state) => state.roads);
+  const isLoading = useRoadStore((state) => state.isLoading);
 
   /* ----------------------------- RENDER -------------------------------- */
 
@@ -25,12 +26,12 @@ export default function SelectPoint({
             null
           );
         }}
-        disabled={!roads.length}
         onChange={handleChange}
         options={roads.map((road) => ({
           value: road.id,
           label: road.name,
         }))}
+        loading={isLoading}
       />
     </Form.Item>
   );

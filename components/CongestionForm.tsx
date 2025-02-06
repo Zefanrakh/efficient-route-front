@@ -1,6 +1,7 @@
+import { RoadCongestionDto } from "@/modules/vehicle/dtos/road-congestion.dto";
 import { VehicleAmountDto } from "@/modules/vehicle/dtos/vehicle-amount.dto";
 import { useRoadStore } from "@/state/road/road-store";
-import { Button, Form, Input, Select } from "antd";
+import { Button, Form, Input, Select, Skeleton } from "antd";
 
 export default function CongestionForm() {
   /* ----------------------------- STATE HOOK -------------------------------- */
@@ -9,6 +10,10 @@ export default function CongestionForm() {
   const congestions = useRoadStore((state) => state.congestions);
   const setCongestions = useRoadStore((state) => state.setCongestions);
   const vehicles = useRoadStore((state) => state.vehicles);
+  const isLoading = useRoadStore((state) => state.isLoading);
+  const isAddCongestionLoading = useRoadStore(
+    (state) => state.isAddCongestionLoading
+  );
 
   /* ----------------------------- FUNCTION -------------------------------- */
 
@@ -50,6 +55,68 @@ export default function CongestionForm() {
 
   /* ----------------------------- RENDER -------------------------------- */
 
+  const renderCongestionList = (road: RoadCongestionDto, roadIndex: number) => {
+    const roadVehicles = road.vehicles;
+    if (roadVehicles.length) {
+      return (
+        <div>
+          {road.vehicles.map((vehicle, vehicleIndex) => (
+            <div
+              key={vehicleIndex}
+              style={{
+                display: "flex",
+                gap: "10px",
+                marginBottom: "5px",
+              }}
+            >
+              <Select
+                loading={isLoading}
+                style={{
+                  flex: 1,
+                }}
+                value={vehicle.vehicle_id}
+                disabled={!vehicles.length}
+                labelRender={(props) =>
+                  vehicles.find((v) => v.id === props.value)?.name || null
+                }
+                onChange={(value) =>
+                  handleUpdateVehicle(
+                    roadIndex,
+                    vehicleIndex,
+                    "vehicle_id",
+                    value
+                  )
+                }
+                options={vehicles.map((vehicle) => ({
+                  value: vehicle.id,
+                  label: vehicle.name,
+                }))}
+              />
+              <Input
+                style={{
+                  flex: 1,
+                }}
+                type="number"
+                min={1}
+                value={vehicle.amount}
+                onChange={(e) =>
+                  handleUpdateVehicle(
+                    roadIndex,
+                    vehicleIndex,
+                    "amount",
+                    parseInt(e.target.value, 10)
+                  )
+                }
+              />
+            </div>
+          ))}
+        </div>
+      );
+    } else {
+      return <></>;
+    }
+  };
+
   return (
     <Form layout="vertical">
       <h3>Congestion</h3>
@@ -63,6 +130,7 @@ export default function CongestionForm() {
           }}
         >
           <Select
+            loading={isLoading}
             style={{ flex: 1 }}
             value={road.road_id?.toString()}
             labelRender={(props) =>
@@ -77,58 +145,12 @@ export default function CongestionForm() {
             }))}
           />
           <div style={{ flex: 1, flexDirection: "column" }}>
-            <div>
-              {road.vehicles.map((vehicle, vehicleIndex) => (
-                <div
-                  key={vehicleIndex}
-                  style={{
-                    display: "flex",
-                    gap: "10px",
-                    marginBottom: "5px",
-                  }}
-                >
-                  <Select
-                    style={{
-                      flex: 1,
-                    }}
-                    value={vehicle.vehicle_id}
-                    disabled={!vehicles.length}
-                    labelRender={(props) =>
-                      vehicles.find((v) => v.id === props.value)?.name || null
-                    }
-                    onChange={(value) =>
-                      handleUpdateVehicle(
-                        roadIndex,
-                        vehicleIndex,
-                        "vehicle_id",
-                        value
-                      )
-                    }
-                    options={vehicles.map((vehicle) => ({
-                      value: vehicle.id,
-                      label: vehicle.name,
-                    }))}
-                  />
-                  <Input
-                    style={{
-                      flex: 1,
-                    }}
-                    type="number"
-                    min={1}
-                    value={vehicle.amount}
-                    onChange={(e) =>
-                      handleUpdateVehicle(
-                        roadIndex,
-                        vehicleIndex,
-                        "amount",
-                        parseInt(e.target.value, 10)
-                      )
-                    }
-                  />
-                </div>
-              ))}
-            </div>
-            <Button type="dashed" onClick={() => handleAddVehicle(roadIndex)}>
+            {renderCongestionList(road, roadIndex)}
+            <Button
+              type="dashed"
+              onClick={() => handleAddVehicle(roadIndex)}
+              loading={isLoading}
+            >
               Add Vehicle
             </Button>
           </div>
@@ -136,12 +158,14 @@ export default function CongestionForm() {
             type="primary"
             danger
             onClick={() => handleRemoveCongestion(roadIndex)}
+            loading={isLoading}
           >
             Remove Congestion
           </Button>
         </div>
       ))}
-      <Button type="dashed" onClick={handleAddRoad}>
+      {isLoading && isAddCongestionLoading && <Skeleton active />}
+      <Button type="dashed" onClick={handleAddRoad} loading={isLoading}>
         Add Road Congestion
       </Button>
     </Form>

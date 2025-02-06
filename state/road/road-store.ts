@@ -11,6 +11,7 @@ export type RoadStore = {
   congestions: RoadCongestionDto[];
   roads: RoadDto[];
   isLoading: boolean;
+  isAddCongestionLoading: boolean;
   vehicles: VehicleDto[];
   setCongestions: (congestion: RoadCongestionDto[]) => void;
   fetchRoads: () => Promise<void>;
@@ -24,9 +25,15 @@ export const useRoadStore = create<RoadStore>((set, get) => ({
   congestions: [],
   roads: [],
   isLoading: false,
+  isAddCongestionLoading: false,
   vehicles: [],
   setCongestions: async (congestions: RoadCongestionDto[]) => {
     try {
+      const currentCongestions = get().congestions;
+      if (congestions.length > currentCongestions.length) {
+        set({ isAddCongestionLoading: true });
+      }
+      set({ isLoading: true });
       const congestionPayload: CongestionDto = {
         congestions: congestions.flatMap(({ road_id, vehicles }) =>
           road_id
@@ -50,6 +57,8 @@ export const useRoadStore = create<RoadStore>((set, get) => ({
       });
     } catch (e: any) {
       console.error("Failed to update congestions:", e);
+    } finally {
+      set({ isLoading: false, isAddCongestionLoading: false });
     }
   },
   fetchRoads: async () => {
