@@ -48,7 +48,10 @@ export const useRoadStore = create<RoadStore>((set, get) => ({
             : []
         ),
       };
-      if (congestions.length) {
+      if (
+        congestions.length ||
+        (!congestions.length && get().congestions.length)
+      ) {
         await axios.post("/vehicle/congestion", congestionPayload);
         await get().fetchCongestions();
       }
