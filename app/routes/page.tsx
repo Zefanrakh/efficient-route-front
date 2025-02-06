@@ -1,9 +1,11 @@
 "use client";
 
 import CongestionForm from "@/components/CongestionForm";
+import Map from "@/components/Map";
 import RouteDirection from "@/components/RouteDirection";
 import SelectPointForm from "@/components/SelectPointForm";
 import { useRoadStore } from "@/state/road/road-store";
+import { Flex } from "antd";
 import { useEffect } from "react";
 
 export default function Home() {
@@ -26,9 +28,16 @@ export default function Home() {
   return (
     <div style={{ padding: 20 }}>
       <h2>Route Finder</h2>
-      <SelectPointForm />
-      <CongestionForm />
-      <RouteDirection />
+      <Flex gap={10} wrap>
+        <div style={{ flex: 1, minWidth: "500px", maxWidth: "600px" }}>
+          <Map />
+        </div>
+        <div style={{ flex: 1 }}>
+          <SelectPointForm />
+          <CongestionForm />
+          <RouteDirection />
+        </div>
+      </Flex>
     </div>
   );
 }
