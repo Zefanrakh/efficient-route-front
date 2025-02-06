@@ -27,7 +27,7 @@ export default function Home() {
 
   return (
     <div style={{ padding: 20 }}>
-      <h2>Route Finder</h2>
+      <h2 style={{ fontSize: "24px" }}>Get Route</h2>
       <Flex gap={10} wrap>
         <div style={{ flex: 1, minWidth: "500px", maxWidth: "600px" }}>
           <Map />
