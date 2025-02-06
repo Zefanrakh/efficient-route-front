@@ -142,6 +142,9 @@ export default function CongestionForm() {
             options={roads.map((road) => ({
               value: road.id,
               label: road.name,
+              disabled: congestions.some(
+                (congestion) => congestion.road_id === road.id
+              ),
             }))}
           />
           <div style={{ flex: 1, flexDirection: "column" }}>
