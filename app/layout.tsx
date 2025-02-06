@@ -1,6 +1,11 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { App, Layout } from "antd";
+import { AntdRegistry } from "@ant-design/nextjs-registry";
+import { Content } from "antd/es/layout/layout";
+import "@ant-design/v5-patch-for-react-19";
+import { Suspense } from "react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,7 +32,33 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <App>
+          <AntdRegistry>
+            <Layout
+              className="!overflow-hidden"
+              style={{
+                overflow: "hidden",
+                width: "calc(100% - 8px)",
+                maxWidth: "calc(100% - 8px)",
+                minHeight: "100vh",
+              }}
+            >
+              <Layout>
+                <Content className="p-4">
+                  {
+                    <Suspense
+                      fallback={
+                        <div className="font-bold bg-green-950">Loading...</div>
+                      }
+                    >
+                      {children}
+                    </Suspense>
+                  }
+                </Content>
+              </Layout>
+            </Layout>
+          </AntdRegistry>
+        </App>
       </body>
     </html>
   );
