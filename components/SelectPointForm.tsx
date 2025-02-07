@@ -1,9 +1,10 @@
-import { Form } from "antd";
+import { Button, Flex, Form, Tooltip } from "antd";
 import SelectPoint from "./SelectPoint";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "antd/es/form/Form";
 import { useEffect } from "react";
 import { useRoadStore } from "@/state/road/road-store";
+import { ArrowsAltOutlined } from "@ant-design/icons";
 
 export default function SelectPointForm() {
   /* ----------------------------- STATE HOOK -------------------------------- */
@@ -26,9 +27,6 @@ export default function SelectPointForm() {
       start,
       end,
     });
-  }, [start, end]);
-
-  useEffect(() => {
     if (start && end) {
       getEfficientRoutes({ start, end });
     }
@@ -36,22 +34,31 @@ export default function SelectPointForm() {
 
   /* ----------------------------- FUNCTION -------------------------------- */
 
-  const updateQueryParam = (param: string, id: string) => {
+  const updateQueryParam = (params: { param: string; id: string }[]) => {
     const currentParams = new URLSearchParams(window.location.search);
-    if (id) {
-      currentParams.set(param, id);
-    } else {
-      currentParams.delete(param);
-    }
+    params.forEach(({ param, id }) => {
+      if (id) {
+        currentParams.set(param, id);
+      } else {
+        currentParams.delete(param);
+      }
+    });
     router.push(`?${currentParams.toString()}`);
   };
 
   const handleStartChange = (id: string) => {
-    updateQueryParam("start", id);
+    updateQueryParam([{ param: "start", id }]);
   };
 
   const handleEndChange = (id: string) => {
-    updateQueryParam("end", id);
+    updateQueryParam([{ param: "end", id }]);
+  };
+
+  const handleReverse = () => {
+    updateQueryParam([
+      { param: "start", id: end },
+      { param: "end", id: start },
+    ]);
   };
 
   /* ----------------------------- RENDER -------------------------------- */
@@ -63,6 +70,26 @@ export default function SelectPointForm() {
         name="start"
         handleChange={handleStartChange}
       />
+      <Flex justify="center">
+        <Tooltip
+          placement="right"
+          title="Reverse starting point and destination"
+        >
+          <Button
+            onClick={handleReverse}
+            color="default"
+            variant="outlined"
+            style={{
+              paddingLeft: 0,
+              paddingRight: 0,
+              paddingTop: "2%",
+              paddingBottom: "2%",
+            }}
+          >
+            <ArrowsAltOutlined style={{ fontSize: "22px" }} rotate={-45} />
+          </Button>
+        </Tooltip>
+      </Flex>
       <SelectPoint
         label="End Location"
         name="end"
