@@ -1,3 +1,5 @@
+"use client";
+
 import { RoadCongestionDto } from "@/modules/vehicle/dtos/road-congestion.dto";
 import { VehicleAmountDto } from "@/modules/vehicle/dtos/vehicle-amount.dto";
 import { useRoadStore } from "@/state/road/road-store";
