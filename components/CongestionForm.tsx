@@ -2,8 +2,13 @@ import { RoadCongestionDto } from "@/modules/vehicle/dtos/road-congestion.dto";
 import { VehicleAmountDto } from "@/modules/vehicle/dtos/vehicle-amount.dto";
 import { useRoadStore } from "@/state/road/road-store";
 import { Button, Form, Input, Select, Skeleton } from "antd";
+import { useMediaQuery } from "react-responsive";
 
 export default function CongestionForm() {
+  /* ----------------------------- HOOK -------------------------------- */
+
+  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
+
   /* ----------------------------- STATE HOOK -------------------------------- */
 
   const roads = useRoadStore((state) => state.roads);
@@ -117,6 +122,14 @@ export default function CongestionForm() {
     }
   };
 
+  const congestionMediaStyle = `
+    marginBottom: 20;
+    display: flex;
+    gap: 10px;
+    @media only screen and (max-width: 768px) {
+      flex-wrap: wrap !important;
+    }`;
+
   return (
     <Form layout="vertical">
       <h3>Congestion</h3>
@@ -127,6 +140,7 @@ export default function CongestionForm() {
             marginBottom: 20,
             display: "flex",
             gap: "10px",
+            flexWrap: isMobile ? "wrap" : "nowrap",
           }}
         >
           <Select
@@ -147,24 +161,32 @@ export default function CongestionForm() {
               ),
             }))}
           />
-          <div style={{ flex: 1, flexDirection: "column" }}>
-            {renderCongestionList(road, roadIndex)}
+          <div
+            style={{
+              marginBottom: 20,
+              display: "flex",
+              gap: "10px",
+            }}
+          >
+            <div style={{ flex: 1, flexDirection: "column" }}>
+              {renderCongestionList(road, roadIndex)}
+              <Button
+                type="dashed"
+                onClick={() => handleAddVehicle(roadIndex)}
+                loading={isLoading}
+              >
+                Add Vehicle
+              </Button>
+            </div>
             <Button
-              type="dashed"
-              onClick={() => handleAddVehicle(roadIndex)}
+              type="primary"
+              danger
+              onClick={() => handleRemoveCongestion(roadIndex)}
               loading={isLoading}
             >
-              Add Vehicle
+              Remove Congestion
             </Button>
           </div>
-          <Button
-            type="primary"
-            danger
-            onClick={() => handleRemoveCongestion(roadIndex)}
-            loading={isLoading}
-          >
-            Remove Congestion
-          </Button>
         </div>
       ))}
       {isLoading && isAddCongestionLoading && <Skeleton active />}

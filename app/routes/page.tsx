@@ -29,10 +29,10 @@ export default function Home() {
     <div style={{ padding: 20 }}>
       <h2 style={{ fontSize: "24px" }}>Get Route</h2>
       <Flex gap={10} wrap>
-        <div style={{ flex: 1, maxWidth: "600px" }}>
+        <div style={{ flex: 1, minWidth: "250px", maxWidth: "600px" }}>
           <Map />
         </div>
-        <div style={{ flex: 1 }}>
+        <div style={{ flex: 1, width: "100%" }}>
           <SelectPointForm />
           <CongestionForm />
           <RouteDirection />
