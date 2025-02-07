@@ -12,10 +12,8 @@ export default function SelectPoint({
 }) {
   /* ----------------------------- STATE HOOK -------------------------------- */
 
-  const { roads, isLoading } = useRoadStore(({ roads, isLoading }) => ({
-    roads,
-    isLoading,
-  }));
+  const roads = useRoadStore((state) => state.roads);
+  const isLoading = useRoadStore((state) => state.isLoading);
 
   /* ----------------------------- RENDER -------------------------------- */
 
