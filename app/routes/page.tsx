@@ -11,9 +11,13 @@ import { useEffect } from "react";
 export default function Home() {
   /* ----------------------------- STATE HOOK -------------------------------- */
 
-  const fetchRoads = useRoadStore((state) => state.fetchRoads);
-  const fetchVehicles = useRoadStore((state) => state.fetchVehicles);
-  const fetchCongestions = useRoadStore((state) => state.fetchCongestions);
+  const { fetchRoads, fetchVehicles, fetchCongestions } = useRoadStore(
+    ({ fetchRoads, fetchVehicles, fetchCongestions }) => ({
+      fetchRoads,
+      fetchVehicles,
+      fetchCongestions,
+    })
+  );
 
   /* ----------------------------- HOOK -------------------------------- */
 

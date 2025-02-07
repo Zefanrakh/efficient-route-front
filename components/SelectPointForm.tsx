@@ -9,8 +9,12 @@ import { ArrowsAltOutlined } from "@ant-design/icons";
 export default function SelectPointForm() {
   /* ----------------------------- STATE HOOK -------------------------------- */
 
-  const congestions = useRoadStore((state) => state.congestions);
-  const getEfficientRoutes = useRoadStore((state) => state.getEfficientRoutes);
+  const { congestions, getEfficientRoutes } = useRoadStore(
+    ({ congestions, getEfficientRoutes }) => ({
+      congestions,
+      getEfficientRoutes,
+    })
+  );
 
   /* ----------------------------- HOOK -------------------------------- */
 

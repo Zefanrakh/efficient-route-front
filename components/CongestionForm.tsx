@@ -6,13 +6,29 @@ import { Button, Form, Input, Select, Skeleton } from "antd";
 export default function CongestionForm() {
   /* ----------------------------- STATE HOOK -------------------------------- */
 
-  const roads = useRoadStore((state) => state.roads);
-  const congestions = useRoadStore((state) => state.congestions);
-  const setCongestions = useRoadStore((state) => state.setCongestions);
-  const vehicles = useRoadStore((state) => state.vehicles);
-  const isLoading = useRoadStore((state) => state.isLoading);
-  const isAddCongestionLoading = useRoadStore(
-    (state) => state.isAddCongestionLoading
+  const {
+    roads,
+    congestions,
+    setCongestions,
+    vehicles,
+    isLoading,
+    isAddCongestionLoading,
+  } = useRoadStore(
+    ({
+      roads,
+      congestions,
+      setCongestions,
+      vehicles,
+      isLoading,
+      isAddCongestionLoading,
+    }) => ({
+      roads,
+      congestions,
+      setCongestions,
+      vehicles,
+      isLoading,
+      isAddCongestionLoading,
+    })
   );
 
   /* ----------------------------- FUNCTION -------------------------------- */
