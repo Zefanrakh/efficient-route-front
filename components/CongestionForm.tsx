@@ -122,14 +122,6 @@ export default function CongestionForm() {
     }
   };
 
-  const congestionMediaStyle = `
-    marginBottom: 20;
-    display: flex;
-    gap: 10px;
-    @media only screen and (max-width: 768px) {
-      flex-wrap: wrap !important;
-    }`;
-
   return (
     <Form layout="vertical">
       <h3>Congestion</h3>

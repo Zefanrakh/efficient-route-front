@@ -1,5 +1,5 @@
 import { Image } from "antd";
 
 export default function Map() {
-  return <Image src="/map.jpg" />;
+  return <Image alt="representational map image" src="/map.jpg" />;
 }
